@@ -3,28 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
+use App\Models\Thread;
 use Illuminate\Http\Request;
 
 class RepliesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->middleware(['auth']);
     }
 
     /**
@@ -33,21 +19,15 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store( Thread $thread)
     {
-        //
+        $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ]);
+        return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Reply $reply)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

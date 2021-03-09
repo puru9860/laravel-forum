@@ -9,6 +9,8 @@ class Thread extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['body','user_id','title'];
+
     public function replies()
     {
         return $this->hasMany(Reply::class);
@@ -16,6 +18,11 @@ class Thread extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function addReply($reply)
+    {
+        $this->replies()->create($reply);
     }
 }

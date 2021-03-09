@@ -1,33 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card mb-5">
-                <div class="card-header">{{$thread->title}}</div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <form action="{{route('replies.store',$thread)}}" method="POST">
+                            @csrf
+                            <input type="text" name="body">
+                            <button type="submit">aa</button></form>
+                        <a href="">{{ $thread->user->name }}</a> posted {{ $thread->title }}
+                    </div>
 
-                <div class="card-body">
-                    {{$thread->body}}
+                    <div class="card-body">
+                        {{ $thread->body }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            @foreach ($thread->replies as $reply)
-            <div class="card mb-2">
-                <div class="card-header">
-                    <a href="#">{{$reply->user->name}}</a> said {{$reply->created_at->diffForHumans()}}
-                </div>
-
-                <div class="card-body">
-                    {{$reply->body}}
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                @foreach ($thread->replies as $reply)
+                    <x-reply :reply=$reply />
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
-</div>
 @endsection

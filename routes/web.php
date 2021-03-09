@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\ThreadsController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/threads',[ThreadsController::class,'index'])->name('threads.index');
 Route::get('/threads/{thread}',[ThreadsController::class,'show'])->name('threads.show');
+Route::post('/threads/{thread}/replies',[RepliesController::class,'store'])->name('replies.store');
+
 
