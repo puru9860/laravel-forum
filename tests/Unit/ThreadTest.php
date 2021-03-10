@@ -19,7 +19,7 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = Thread::factory()->create();
+        $this->thread = create(Thread::class);
     }
 
     /** @test */
@@ -28,13 +28,13 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf(Collection::class,$this->thread->replies);
     }
 
-    /**@test */
+    /** @test */
     public function a_thread_has_owner()
     {
         $this->assertInstanceOf(User::class,$this->thread->user);
     }
 
-    /**@test */
+    /** @test */
     public function a_thread_can_add_reply()
     {
         $this->thread->addReply([
@@ -45,15 +45,13 @@ class ThreadTest extends TestCase
         $this->assertCount(1,$this->thread->replies);
     }
 
-    /**@test */
+    /** @test */
     public function an_authenticated_user_may_participate_in_forum()
     {
-        $this->expectException(AuthenticationException::class);
-        // $this->be($user = User::factory()->create());
-        $user = User::factory()->create();
-        $thread = Thread::factory()->create();
+        $this->signIn();
+        $thread = create(Thread::class);
 
-        $reply = Reply::factory()->make();
+        $reply = make(Reply::class);
         $this->post('/threads/'.$thread->id.'/replies',$reply->toArray());
 
         $this->get('/threads/'.$thread->id)->assertSee($reply->body);

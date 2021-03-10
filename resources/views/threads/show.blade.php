@@ -6,10 +6,7 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <form action="{{route('replies.store',$thread)}}" method="POST">
-                            @csrf
-                            <input type="text" name="body">
-                            <button type="submit">aa</button></form>
+
                         <a href="">{{ $thread->user->name }}</a> posted {{ $thread->title }}
                     </div>
 
@@ -27,5 +24,25 @@
                 @endforeach
             </div>
         </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+        @auth
+
+                    <form action="{{ route('replies.store', $thread) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <textarea name="body" id="body" class="form-control" rows="5"> </textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </form>
+
+        @endauth
+
+        @guest
+            <p class="text-center">Please <a href="{{route('login')}}">sign in </a>to participate discussion</p>
+        @endguest
+    </div>
+</div>
     </div>
 @endsection

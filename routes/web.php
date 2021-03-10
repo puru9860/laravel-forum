@@ -24,8 +24,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/threads',[ThreadsController::class,'index'])->name('threads.index');
-Route::get('/threads/{thread}',[ThreadsController::class,'show'])->name('threads.show');
+Route::resource('threads', ThreadsController::class);
+
 Route::post('/threads/{thread}/replies',[RepliesController::class,'store'])->name('replies.store');
 
 

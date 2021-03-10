@@ -17,12 +17,11 @@ class ParticipateinForumTest extends TestCase
     use DatabaseMigrations;
 
 
-    // /** @test */
-    // public function unauthenticated_user_may_not_add_reply()
-    // {
-    //     $this->expectException(AuthenticationException::class);
-    //     $this->post('/threads/1/replies',[]);
-    // }
+    /** @test */
+    public function unauthenticated_user_may_not_add_reply()
+    {
+        $this->post('/threads/1/replies',[])->assertRedirect('login');
+    }
 
 
     /**
@@ -30,10 +29,10 @@ class ParticipateinForumTest extends TestCase
      */
     public function an_authenticated_user_may_participate_in_forum()
     {
-        $this->be($user = User::factory()->create());
-        $thread = Thread::factory()->create();
+        $this->signIn();
+        $thread = create(Thread::class);
 
-        $reply = Reply::factory()->make([
+        $reply = make(Reply::class,[
             'thread_id' => $thread->id
         ]);
         $this->post('/threads/'.$thread->id.'/replies',$reply->toArray());
