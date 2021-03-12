@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -10,18 +11,22 @@ class ThreadsController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['auth'])->except(['index','show']);
+        $this->middleware(['auth'])->except(['index', 'show']);
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Channel $channel)
     {
-        $threads = Thread::latest()->get();
 
-        return view('threads.index',[
+        if ($channel->exists)
+            $threads = $channel->threads()->latest()->get();
+        else
+            $threads = Thread::latest()->get();
+
+        return view('threads.index', [
             'threads' => $threads
         ]);
     }
@@ -44,12 +49,19 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
+
         $thread =  Thread::create([
             'user_id' => auth()->id(),
+            'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body'),
         ]);
-        return redirect(route('threads.show',$thread));
+        return redirect($thread->path());
     }
 
     /**
@@ -58,9 +70,9 @@ class ThreadsController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channel_id, Thread $thread)
     {
-        return view('threads.show',compact('thread'));
+        return view('threads.show', compact('thread'));
     }
 
     /**

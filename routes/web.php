@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\ThreadsController;
+use Database\Factories\ThreadFactory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,8 +25,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::resource('threads', ThreadsController::class);
+Route::resource('threads', ThreadsController::class)->except(['show']);
 
-Route::post('/threads/{thread}/replies',[RepliesController::class,'store'])->name('replies.store');
+Route::get('threads/{channel}/{thread}',[ThreadsController::class,'show'])->name('threads.show');
+
+Route::get('/threads/{channel}', [ThreadsController::class, 'index'])->name('channels.show');
+
+
+Route::post('/threads/{channel}/{thread}/replies',[RepliesController::class,'store'])->name('replies.store');
 
 

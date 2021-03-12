@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -35,7 +37,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_read_a_single_thread()
     {
-        $this->get('/threads/' . $this->thread->id)->assertSee($this->thread->title);
+        $this->get($this->thread->path())->assertSee($this->thread->title);
     }
 
     /** @test */
@@ -44,6 +46,32 @@ class ReadThreadsTest extends TestCase
         $reply = create(Reply::class,[
             'thread_id' => $this->thread->id,
         ]);
-        $this->get('/threads/' . $this->thread->id)->assertSee($reply->body);
+        $this->get($this->thread->path())->assertSee($reply->body);
     }
+
+    /** @test */
+    public function a_user_can_filter_threads_according_to_channel()
+    {
+        $channel =create(Channel::class);
+        $threadInChannel = create(Thread::class,['channel_id' => $channel->id]);
+        $threadNotInChannel = create(Thread::class);
+
+        $this->get("/threads/{$channel->slug}")
+        ->assertSee($threadInChannel->title)
+        ->assertDontSee($threadNotInChannel->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_username()
+    {
+        $this->signIn(create(User::class,['name'=>'JohnDoe']));
+
+        $threadByJohn = create(Thread::class,['user_id'=>auth()->id()]);
+        $thrreadNotByJohn = create(Thread::class);
+
+        $this->get('threads?byJhonDoe')
+            ->assertSee($threadByJohn->title)
+            ->assertDontSee($thrreadNotByJohn->title);
+    }
+
 }

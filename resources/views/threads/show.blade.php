@@ -29,13 +29,13 @@
             <div class="col-md-8">
         @auth
 
-                    <form action="{{ route('replies.store', $thread) }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" rows="5"> </textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Post</button>
-                    </form>
+            <form action="{{ route('replies.store',[$thread->channel->slug, $thread]) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <textarea name="body" id="body" class="form-control" rows="5"> </textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </form>
 
         @endauth
 

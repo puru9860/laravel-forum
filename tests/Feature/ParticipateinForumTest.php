@@ -20,7 +20,9 @@ class ParticipateinForumTest extends TestCase
     /** @test */
     public function unauthenticated_user_may_not_add_reply()
     {
-        $this->post('/threads/1/replies',[])->assertRedirect('login');
+        $this->withoutExceptionHandling();
+        $this->expectException(AuthenticationException::class);
+        $this->post('/threads/slug/1/replies',[]);
     }
 
 
@@ -32,11 +34,22 @@ class ParticipateinForumTest extends TestCase
         $this->signIn();
         $thread = create(Thread::class);
 
-        $reply = make(Reply::class,[
-            'thread_id' => $thread->id
-        ]);
-        $this->post('/threads/'.$thread->id.'/replies',$reply->toArray());
+        $reply = make(Reply::class);
+        $this->post($thread->path().'/replies',$reply->toArray());
+        $this->get($thread->path())->assertSee($reply->body);
+    }
 
-        $this->get('/threads/'.$thread->id)->assertSee($reply->body);
+    /** @test */
+    public function a_reply_requires_a_body()
+    {
+        $this->signIn();
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class,[
+            'body' => null
+        ]);
+        $this->post($thread->path().'/replies',$reply->toArray())
+        ->assertSessionHasErrors('body');
+
     }
 }
