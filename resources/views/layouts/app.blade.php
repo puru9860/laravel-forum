@@ -19,9 +19,22 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+        .level {
+            display: flex;
+            align-items: center;
+        }
+        .flex{
+            flex: 1;
+        }
+        h4{
+            margin: 0
+        }
+    </style>
 </head>
 
-<body class="padding-bottom=100px">
+<body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -38,6 +51,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('threads.index') }}">All Threads</a></li>
+                            <li><a class="dropdown-item" href='/threads?popular=1'>Popular All Time</a></li>
                             @auth
                                 <li><a class="dropdown-item" href="/threads?by={{ auth()->user()->name }}">My Threads</a>
                                 </li>
@@ -99,7 +113,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                                                                     document.getElementById('logout-form').submit();">
+                                                                                                         document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

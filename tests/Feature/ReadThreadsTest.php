@@ -64,14 +64,37 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_filter_threads_by_username()
     {
+        $this->withoutExceptionHandling();
         $this->signIn(create(User::class,['name'=>'JohnDoe']));
 
         $threadByJohn = create(Thread::class,['user_id'=>auth()->id()]);
         $thrreadNotByJohn = create(Thread::class);
 
-        $this->get('threads?byJhonDoe')
+        $this->get('/threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($thrreadNotByJohn->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_popularity()
+    {
+        $threadWithTwoReplies = create(Thread::class);
+        create(Reply::class,['thread_id' => $threadWithTwoReplies->id],2);
+
+        $threadWithThreeReplies = create(Thread::class);
+        create(Reply::class,['thread_id' => $threadWithThreeReplies->id],3);
+
+        $threadWithNoReplies = $this->thread;
+
+        $threadWithFiveReplies = create(Thread::class);
+        create(Reply::class,['thread_id' => $threadWithFiveReplies->id],5);
+
+       $response = $this->get('/threads?popular=1')->assertSeeInOrder([
+            $threadWithFiveReplies->title,
+            $threadWithThreeReplies->title,
+            $threadWithTwoReplies->title,
+            $threadWithNoReplies->title
+          ]);
     }
 
 }

@@ -10,6 +10,16 @@ class Thread extends Model
     use HasFactory;
 
     protected $fillable = ['body','user_id','title','channel_id'];
+    protected $with = ['user','channel'];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('replyCount',function($builder){
+            $builder->withCount('replies');
+        });
+    }
 
     public function replies()
     {
@@ -35,5 +45,10 @@ class Thread extends Model
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->id}";
+    }
+
+    public function scopeFilter($query,$filters)
+    {
+        return $filters->apply($query);
     }
 }
