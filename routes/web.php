@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\ThreadsController;
 use Database\Factories\ThreadFactory;
@@ -37,3 +38,4 @@ Route::post('/threads/{channel}/{thread}/replies',[RepliesController::class,'sto
 
 Route::post('/replies/{reply}/favorites',[FavoritesController::class,'store'])->name('favorites.store');
 
+Route::get('/profiles/{user}',[ProfilesController::class,'show'])->name('profile.show');

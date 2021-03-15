@@ -4,7 +4,7 @@
     <div class="card-header">
         <div class="level">
             <div class="flex">
-                <a href="#" class="text">{{$reply->user->name }} </a> said {{$reply->created_at->diffForHumans()}}
+                <a href="{{route('profile.show',$reply->user->name)}}" class="text">{{$reply->user->name }} </a> said {{$reply->created_at->diffForHumans()}}
             </div>
             <div>
                 <form action="{{route('favorites.store',$reply->id)}}" method="POST">

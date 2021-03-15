@@ -2,21 +2,33 @@
 
 namespace Tests\Feature;
 
+use App\Models\Thread;
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProfilesTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
+    use DatabaseMigrations;
+    /** @test */
+    public function a_user_has_profile()
     {
-        $response = $this->get('/');
+        $user = create(User::class);
 
-        $response->assertStatus(200);
+        $this->get("/profiles/{$user->name}")
+        ->assertSee($user->name);
     }
+
+    /** @test */
+    public function profile_displays_all_threads_created_by_associated_user()
+    {
+        $user = create(User::class);
+        $thread = create(Thread::class,['user_id' =>$user->id]);
+        $this->get("/profiles/{$user->name}")
+        ->assertSee($thread->title)
+        ->assertSee($thread->body);
+    }
+
 }

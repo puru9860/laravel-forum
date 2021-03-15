@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header d-flex ">
-                        <h5 class="mr-1"><a href="">{{ $thread->user->name }}</a> </h5>
+                        <h5 class="mr-1"><a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> </h5>
                          posted {{ $thread->title }}
                     </div>
 
@@ -41,7 +41,7 @@
                 <div class="card">
                     <div class="card-body">
                         This thread was published {{ $thread->created_at->diffForHumans() }} by
-                        <a href="#">{{ $thread->user->name }}</a> and currently has {{ $thread->replies_count }}
+                        <a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> and currently has {{ $thread->replies_count }}
                         {{ Str::plural('comment', $thread->replies_count) }}
                     </div>
                 </div>
