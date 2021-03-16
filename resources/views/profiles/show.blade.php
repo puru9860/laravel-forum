@@ -6,30 +6,24 @@
         <div class="row justify-content-center">
             <div class="col-md-8 ">
                 <div class="card mb-5 border-light">
-                    <div class="card-header text-muted">
+                    <div class="card-header text-muted d-flex justify-content-between">
                         <h1>
                             {{ $profileUser->name }}
-                            <small>since {{ $profileUser->created_at->diffForHumans() }}</small>
                         </h1>
+                        <div class="">
+                           Member since {{ $profileUser->created_at->format('y-m-d') }}
+                        </div>
                     </div>
 
                 </div>
 
-                @foreach ($threads as $thread)
-                    <div class="card mb-4">
-                        <div class="card-header d-flex justify-content-between">
-                            <span><a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> </h5>
-                                posted  <a href="{{$thread->path()}}"> {{ $thread->title }}</a>
-                            </span>
-                            <span>{{$thread->created_at->diffForHumans()}}</span>
-                        </div>
-
-                        <div class="card-body">{{ $thread->body }}</div>
-                    </div>
-                    <hr>
+                @foreach ($groupedActivities as $date => $activities)
+                <h3 class="text-muted mb-3">{{$date}}</h3>
+                    @foreach ($activities as $activity)
+                        @include("profiles.activites.{$activity->type}")
+                    @endforeach
                 @endforeach
 
-                {{$threads->links()}}
             </div>
         </div>
     </div>

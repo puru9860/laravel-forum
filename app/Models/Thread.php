@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory;
+    use HasFactory,RecordsActivity;
 
     protected $fillable = ['body','user_id','title','channel_id'];
     protected $with = ['user','channel'];
@@ -19,7 +20,11 @@ class Thread extends Model
         static::addGlobalScope('replyCount',function($builder){
             $builder->withCount('replies');
         });
+
+
     }
+
+
 
     public function replies()
     {
