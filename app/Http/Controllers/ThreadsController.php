@@ -108,8 +108,12 @@ class ThreadsController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy(Channel $channel,Thread $thread)
     {
-        //
+        $this->authorize('update',$thread);
+        $thread->replies()->delete();
+        $thread->delete();
+
+        return redirect(route('profile.show',auth()->user()));
     }
 }

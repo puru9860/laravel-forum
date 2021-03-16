@@ -5,9 +5,20 @@
         <div class="row ">
             <div class="col-md-8">
                 <div class="card mb-3">
-                    <div class="card-header d-flex ">
-                        <h5 class="mr-1"><a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> </h5>
-                         posted {{ $thread->title }}
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="align-items-center">
+                            <h5 class="mr-1 d-inline"><a
+                                    href="{{ route('profile.show', $thread->user->name) }}">{{ $thread->user->name }}</a>
+                            </h5>posted {{ $thread->title }}
+                        </div>
+                        @can('update', $thread)
+                            <form action="{{ $thread->path() }}" method="post">
+                                @method('delete')
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        @endcan
+
                     </div>
 
                     <div class="card-body">
@@ -26,7 +37,8 @@
                     <form action="{{ route('replies.store', [$thread->channel->slug, $thread]) }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" rows="5" placeholder="Have something to say?"></textarea>
+                            <textarea name="body" id="body" class="form-control" rows="5"
+                                placeholder="Have something to say?"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Post</button>
                     </form>
@@ -41,7 +53,8 @@
                 <div class="card">
                     <div class="card-body">
                         This thread was published {{ $thread->created_at->diffForHumans() }} by
-                        <a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> and currently has {{ $thread->replies_count }}
+                        <a href="{{ route('profile.show', $thread->user->name) }}">{{ $thread->user->name }}</a> and
+                        currently has {{ $thread->replies_count }}
                         {{ Str::plural('comment', $thread->replies_count) }}
                     </div>
                 </div>

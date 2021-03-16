@@ -27,9 +27,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::resource('threads', ThreadsController::class)->except(['show']);
-
+Route::get('/threads', [ThreadsController::class, 'index'])->name('threads.index');
+Route::post('/threads', [ThreadsController::class, 'store'])->name('threads.store');
+Route::get('/threads/create', [ThreadsController::class, 'create'])->name('threads.create');
 Route::get('threads/{channel}/{thread}',[ThreadsController::class,'show'])->name('threads.show');
+Route::delete('/threads/{channel}/{thread}', [ThreadsController::class, 'destroy'])->name('thread.delete');
+
+
 
 Route::get('/threads/{channel}', [ThreadsController::class, 'index'])->name('channels.show');
 

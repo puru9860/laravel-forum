@@ -19,7 +19,7 @@
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between">
                             <span><a href="{{route('profile.show',$thread->user->name)}}">{{ $thread->user->name }}</a> </h5>
-                                posted {{ $thread->title }}
+                                posted  <a href="{{$thread->path()}}"> {{ $thread->title }}</a>
                             </span>
                             <span>{{$thread->created_at->diffForHumans()}}</span>
                         </div>

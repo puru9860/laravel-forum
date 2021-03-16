@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
 
-                @foreach ($threads as $thread)
+                @forelse ($threads as $thread )
                     <div class="mb-4 card">
                         <div class="card-header">
                             <div class="level">
@@ -20,7 +20,9 @@
 
                         <div class="card-body">{{ $thread->body }}</div>
                     </div>
-                @endforeach
+                @empty
+                    There are no threads associated to this channel
+                @endforelse
             </div>
         </div>
     </div>
