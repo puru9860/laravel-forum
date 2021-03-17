@@ -46,4 +46,9 @@ class Reply extends Model
       return $this->favorites->count();
 
     }
+
+    public function path()
+    {
+        return $this->thread->path().'#reply-'.$this->id;
+    }
 }

@@ -25,12 +25,15 @@
             display: flex;
             align-items: center;
         }
-        .flex{
+
+        .flex {
             flex: 1;
         }
-        h4{
+
+        h4 {
             margin: 0
         }
+
     </style>
 </head>
 
@@ -41,6 +44,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        @if(session('flash'))
+            <div data='{{ session('flash') }}' id="flash">
+            </div>
+        @endif
+
+
     </div>
 </body>
 

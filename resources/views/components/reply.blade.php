@@ -1,6 +1,6 @@
 @props(['reply' => $reply])
 
-<div class="card mb-3">
+<div id="reply-{{$reply->id}}" class="card mb-3">
     <div class="card-header">
         <div class="level">
             <div class="flex">

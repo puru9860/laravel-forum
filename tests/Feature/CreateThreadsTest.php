@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
@@ -84,14 +85,16 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function authorized_user_can_delete_thread()
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
         $thread = create(Thread::class,['user_id' => auth()->id()]);
         $reply = create(Reply::class,['thread_id' => $thread->id]);
 
         $this->delete($thread->path());
-        $this->assertDatabaseMissing('threads',['id'=>$thread->id]);
+        $this->assertDatabaseMissing('threads',['id'=>1]);
         $this->assertDatabaseMissing('replies',['id'=>$reply->id]);
+        $this->assertEquals(0,Activity::all()->count());
 
     }
 

@@ -28,7 +28,11 @@ class RepliesController extends Controller
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
-        return back();
+        return back()->with([
+            'flash' =>json_encode([
+                'type' => 'Success',
+                'body' => 'Reply Added'
+        ])]);
     }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filters\ThreadFilters;
 use App\Models\Channel;
+use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -62,7 +63,11 @@ class ThreadsController extends Controller
             'title' => request('title'),
             'body' => request('body'),
         ]);
-        return redirect($thread->path());
+        return redirect($thread->path())->with([
+            'flash' =>json_encode([
+                'type' => 'Success',
+                'body' => 'Thread published'
+        ])]);
     }
 
     /**
@@ -111,7 +116,6 @@ class ThreadsController extends Controller
     public function destroy(Channel $channel,Thread $thread)
     {
         $this->authorize('update',$thread);
-        $thread->replies()->delete();
         $thread->delete();
 
         return redirect(route('profile.show',auth()->user()));
