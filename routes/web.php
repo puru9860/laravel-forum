@@ -39,6 +39,8 @@ Route::get('/threads/{channel}', [ThreadsController::class, 'index'])->name('cha
 
 
 Route::post('/threads/{channel}/{thread}/replies',[RepliesController::class,'store'])->name('replies.store');
+Route::delete('/replies/{reply}',[RepliesController::class,'destroy'])->name('replies.delete');
+
 
 Route::post('/replies/{reply}/favorites',[FavoritesController::class,'store'])->name('favorites.store');
 

@@ -22,7 +22,7 @@ class ParticipateinForumTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->expectException(AuthenticationException::class);
-        $this->post('/threads/slug/1/replies',[]);
+        $this->post('/threads/slug/1/replies', []);
     }
 
 
@@ -35,7 +35,7 @@ class ParticipateinForumTest extends TestCase
         $thread = create(Thread::class);
 
         $reply = make(Reply::class);
-        $this->post($thread->path().'/replies',$reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
         $this->get($thread->path())->assertSee($reply->body);
     }
 
@@ -45,11 +45,32 @@ class ParticipateinForumTest extends TestCase
         $this->signIn();
         $thread = create(Thread::class);
 
-        $reply = make(Reply::class,[
+        $reply = make(Reply::class, [
             'body' => null
         ]);
-        $this->post($thread->path().'/replies',$reply->toArray())
-        ->assertSessionHasErrors('body');
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
+    }
 
+    /** @test */
+    public function unauthorized_user_cannot_delete_reply()
+    {
+        $reply = create(Reply::class);
+        $this->delete("/replies/{$reply->id}")
+            ->assertRedirect("/login");
+
+        $this->signIn()
+            ->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authorized_user_cannot_delete_his_reply()
+    {
+        $this->signIn();
+        $reply = create(Reply::class,['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}");
+        $this->assertDatabaseMissing('replies',['id' => $reply->id]);
     }
 }

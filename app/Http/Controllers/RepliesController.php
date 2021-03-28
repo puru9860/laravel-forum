@@ -21,7 +21,7 @@ class RepliesController extends Controller
      */
     public function store($channel_id, Thread $thread)
     {
-        $this->validate(request(),[
+        $this->validate(request(), [
             'body' => 'required'
         ]);
         $thread->addReply([
@@ -29,10 +29,11 @@ class RepliesController extends Controller
             'user_id' => auth()->id()
         ]);
         return back()->with([
-            'flash' =>json_encode([
+            'flash' => json_encode([
                 'type' => 'Success',
                 'body' => 'Reply Added'
-        ])]);
+            ])
+        ]);
     }
 
 
@@ -67,6 +68,8 @@ class RepliesController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+        $reply->delete();
+        return back();
     }
 }
