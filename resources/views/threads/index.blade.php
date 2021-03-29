@@ -21,7 +21,7 @@
                         <div class="card-body">{{ $thread->body }}</div>
                     </div>
                 @empty
-                    There are no threads associated to this channel
+                    There are no threads
                 @endforelse
             </div>
         </div>

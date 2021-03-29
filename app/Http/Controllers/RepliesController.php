@@ -10,7 +10,21 @@ class RepliesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth']);
+        $this->middleware(['auth'])->except('show');
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Thread  $thread
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Thread $thread)
+    {
+        return response()->json([
+            'replies' => $thread->replies()->paginate(20)
+        ]);
     }
 
     /**
@@ -37,16 +51,7 @@ class RepliesController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
